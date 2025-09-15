@@ -1,3 +1,8 @@
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
 resource "google_composer_environment" "test" {
   name   = "example-composer-env"
   region = "us-central1"
