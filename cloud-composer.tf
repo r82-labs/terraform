@@ -14,6 +14,5 @@ resource "google_composer_environment" "test" {
 
 variable "project_id" {
   description = "Project id"
-  type        = string
   default     = "banded-scion-461009-a0"
 }
