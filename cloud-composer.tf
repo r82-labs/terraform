@@ -1,6 +1,5 @@
 provider "google" {
   project = var.project_id
-  region  = var.region
 }
 
 resource "google_composer_environment" "test" {
