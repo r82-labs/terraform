@@ -11,12 +11,6 @@ provider "google" {
   project = var.project_id
 }
 
-resource "google_project_iam_member" "composer_agent_service_account" {
-  project = var.project_id
-  role = "roles/composer.serviceAgent"
-  member = "serviceAccount:full-admin@${var.project_id}.iam.gserviceaccount.com"
-}
-
 resource "google_composer_environment" "composer_env" {
   name = "example-composer-env"
   region = "us-central1"
@@ -31,23 +25,54 @@ resource "google_composer_environment" "composer_env" {
     }
     workloads_config {
       scheduler {
-        cpu = 1.0
-        memory_gb = 4.0
+        cpu        = 0.5
+        memory_gb  = 2
+        storage_gb = 1
+        count      = 1
       }
-      worker {
-        cpu = 1.0
-        memory_gb = 4.0
+      triggerer {
+        cpu        = 0.5
+        memory_gb  = 1
+        count      = 1
+      }
+      dag_processor {
+        cpu        = 1
+        memory_gb  = 2
+        storage_gb = 1
+        count      = 1
       }
       web_server {
-        cpu = 1.0
-        memory_gb = 4.0
+        cpu        = 0.5
+        memory_gb  = 2
+        storage_gb = 1
       }
+      worker {
+        cpu = 0.5
+        memory_gb  = 2
+        storage_gb = 1
+        min_count  = 1
+        max_count  = 3
+      }
+
+    }
+    environment_size = "ENVIRONMENT_SIZE_SMALL"
+
+    node_config {
+      service_account = google_service_account.test.name
     }
   }
-
-  depends_on = [google_project_iam_member.composer_agent_service_account]
 }
 
+resource "google_service_account" "test" {
+  account_id   = "composer-env-account"
+  display_name = "Test Service Account for Composer Environment"
+}
+
+resource "google_project_iam_member" "composer-worker" {
+  project = var.project_id
+  role    = "roles/composer.worker"
+  member  = "serviceAccount:${google_service_account.test.email}"
+}
 variable "project_id" {
   description = "Project id"
   default     = "banded-scion-461009-a0"
