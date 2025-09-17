@@ -19,7 +19,7 @@ provider "google" {
 resource "google_project_iam_member" "composer_agent_service_account" {
   project = var.project_id
   role    = "roles/composer.serviceAgent"
-  member  = "serviceAccount:service-${var.project_number}@gcp-sa-composer.iam.gserviceaccount.com"
+  member  = "serviceAccount:composer-env-account@${var.project_id}.iam.gserviceaccount.com"
 
   depends_on = [google_project_service.composer_api] 
 }
