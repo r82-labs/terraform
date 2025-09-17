@@ -71,6 +71,7 @@ resource "google_composer_environment" "composer_env" {
     }
   }
   depends_on = [
+    google_project_service.composer_api,
     google_project_iam_member.composer_agent_service_account
   ]
 }
