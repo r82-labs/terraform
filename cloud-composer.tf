@@ -12,7 +12,7 @@ provider "google" {
 }
 
 resource "google_cloud_run_v2_service" "default" {
-  name     = "cloudrun-service"
+  name     = "cloudrun-service-1"
   location = "us-central1"
   deletion_protection = false
   ingress = "INGRESS_TRAFFIC_ALL"
