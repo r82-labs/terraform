@@ -11,12 +11,19 @@ provider "google" {
   project = var.project_id
 }
 
-resource "google_composer_environment" "test" {
-  name   = "example-composer-env"
-  region = "us-central1"
- config {
-    software_config {
-      image_version = "composer-3-airflow-2"
+resource "google_cloud_run_v2_service" "default" {
+  name     = "cloudrun-service"
+  location = "us-central1"
+  deletion_protection = false
+  ingress = "INGRESS_TRAFFIC_ALL"
+
+  scaling {
+    max_instance_count = 100
+  }
+
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
     }
   }
 }
