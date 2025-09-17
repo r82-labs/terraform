@@ -33,7 +33,7 @@ resource "google_cloud_run_v2_service_iam_member" "member" {
   location = google_cloud_run_v2_service.default.location
   name = google_cloud_run_v2_service.default.name
   role     = "roles/run.invoker"
-  member   = "allUsers"
+  member   = "user:ronan@r82labs.com"
 }
 
 variable "project_id" {
