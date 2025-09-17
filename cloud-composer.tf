@@ -7,6 +7,11 @@ terraform {
   }
 }
 
+resource "google_project_service" "composer_api" {
+  project = var.project_id
+  service = "composer.googleapis.com"
+}
+
 provider "google" {
   project = var.project_id
 }
