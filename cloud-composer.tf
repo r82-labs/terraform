@@ -17,20 +17,43 @@ resource "google_project_iam_member" "composer_agent_service_account" {
   member = "serviceAccount:service-${var.project_number}@gcp-sa-composer.iam.gserviceaccount.com"
 }
 
-resource "google_composer_environment" "test" {
-  name   = "example-composer-env"
+resource "google_composer_environment" "composer_env" {
+  name = "example-composer-env"
   region = "us-central1"
+
   config {
+    node_count = 3
+    node_config {
+      machine_type = "n1-standard-1"
+    }
     software_config {
       image_version = "composer-3-airflow-2"
     }
+    workloads_config {
+      scheduler {
+        cpu = 1.0
+        memory_gb = 4.0
+      }
+      worker {
+        cpu = 1.0
+        memory_gb = 4.0
+      }
+      web_server {
+        cpu = 1.0
+        memory_gb = 4.0
+      }
+    }
   }
+
+  depends_on = [google_project_iam_member.composer_agent_service_account]
 }
 
 variable "project_id" {
   description = "Project id"
   default     = "banded-scion-461009-a0"
 }
+
 variable "project_number" {
   description = "Project Number"
   default = "143720609546"
+}
